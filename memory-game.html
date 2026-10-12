@@ -7,12 +7,32 @@
     <style>
         /* Reset default styles and set up CSS custom properties for theming */
         :root {
-            --primary-color: #2196f3;
+            --primary-color: #1976d2;
             --background-color: #f5f5f5;
             --card-back: #1976d2;
             --card-front: #ffffff;
             --text-color: #333333;
             --success-color: #4caf50;
+            --panel-background: #ffffff;
+            --panel-shadow: rgba(0, 0, 0, 0.1);
+            --button-hover: #1565c0;
+            --button-active: #0d47a1;
+            --focus-color: #2196f3;
+            --card-border: transparent;
+        }
+
+        :root[data-theme="dark"] {
+            --primary-color: #1d4ed8;
+            --background-color: #111827;
+            --card-back: #2563eb;
+            --card-front: #273449;
+            --text-color: #f3f4f6;
+            --panel-background: #1f2937;
+            --panel-shadow: rgba(0, 0, 0, 0.35);
+            --button-hover: #1e40af;
+            --button-active: #1e3a8a;
+            --focus-color: #93c5fd;
+            --card-border: #9ca3af;
         }
 
         * {
@@ -29,6 +49,7 @@
             line-height: 1.6;
             padding: 20px;
             min-height: 100vh;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
 
         /* Main container with max-width for larger screens */
@@ -54,10 +75,10 @@
             justify-content: space-around;
             flex-wrap: wrap;
             gap: 1rem;
-            background: white;
+            background: var(--panel-background);
             padding: 1rem;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px var(--panel-shadow);
             margin-bottom: 2rem;
         }
 
@@ -72,7 +93,10 @@
 
         /* Grid size selector styles */
         .grid-selector {
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
             margin-bottom: 2rem;
         }
 
@@ -88,11 +112,16 @@
         }
 
         button:hover {
-            background-color: #1565c0;
+            background-color: var(--button-hover);
         }
 
         button.active {
-            background-color: #0d47a1;
+            background-color: var(--button-active);
+        }
+
+        button:focus-visible {
+            outline: 3px solid var(--focus-color);
+            outline-offset: 3px;
         }
 
         /* Game grid styles with responsive layout */
@@ -123,7 +152,7 @@
         }
 
         .card:focus {
-            outline: 3px solid var(--primary-color);
+            outline: 3px solid var(--focus-color);
             outline-offset: 2px;
         }
 
@@ -146,7 +175,8 @@
             align-items: center;
             justify-content: center;
             font-size: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px var(--panel-shadow);
+            border: 1px solid var(--card-border);
         }
 
         .card-front {
@@ -173,7 +203,7 @@
         }
 
         .modal-content {
-            background: white;
+            background: var(--panel-background);
             padding: 2rem;
             border-radius: 8px;
             text-align: center;
@@ -190,7 +220,7 @@
         .scores-list {
             max-width: 600px;
             margin: 1rem auto;
-            background: white;
+            background: var(--panel-background);
             padding: 1rem;
             border-radius: 8px;
         }
@@ -240,6 +270,7 @@
         <div class="grid-selector">
             <button class="grid-btn active" data-size="4">4x4 Grid</button>
             <button class="grid-btn" data-size="6">6x6 Grid</button>
+            <button class="theme-toggle" type="button" aria-pressed="false">Dark theme</button>
         </div>
 
         <!-- Game grid -->
@@ -286,8 +317,30 @@
             modal: document.querySelector('.modal'),
             finalStats: document.querySelector('.final-stats'),
             gridButtons: document.querySelectorAll('.grid-btn'),
-            scoresList: document.querySelector('.scores-list')
+            scoresList: document.querySelector('.scores-list'),
+            themeToggle: document.querySelector('.theme-toggle')
         };
+
+        const themeStorageKey = 'memoryGameTheme';
+
+        function applyTheme(theme, savePreference = false) {
+            const isDark = theme === 'dark';
+            document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+            elements.themeToggle.setAttribute('aria-pressed', String(isDark));
+
+            if (savePreference) {
+                localStorage.setItem(themeStorageKey, theme);
+            }
+        }
+
+        const savedTheme = localStorage.getItem(themeStorageKey);
+        applyTheme(savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'light');
+        elements.themeToggle.addEventListener('click', () => {
+            const nextTheme = elements.themeToggle.getAttribute('aria-pressed') === 'true'
+                ? 'light'
+                : 'dark';
+            applyTheme(nextTheme, true);
+        });
 
         // Card symbols (emojis) for both grid sizes
         const symbols = {
