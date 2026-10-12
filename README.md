@@ -1,6 +1,10 @@
-# Memory Game
+# Memory Game and Word Search
 
-A responsive and accessible Memory (Concentration) card game built with HTML, CSS, and JavaScript.
+Two standalone browser games built with HTML, CSS, and JavaScript.
+
+## Memory Game
+
+A responsive and accessible Memory (Concentration) card game.
 
 ## Features
 
@@ -23,18 +27,25 @@ A responsive and accessible Memory (Concentration) card game built with HTML, CS
 
 ## Technical Details
 
-- Pure HTML, CSS, and JavaScript implementation
+- Pure HTML, CSS, and JavaScript implementation in `memory-game.html`
 - No external libraries or dependencies
 - Fully responsive design using CSS Grid
 - Accessible with ARIA attributes and keyboard controls
 - Local storage for persistent high scores
 
+## Word Search
+
+Open `word-search.html` in a web browser. Choose an Animals, Nature, or Food theme and an Easy, Medium, or Hard grid. Find the listed words by dragging across their letters or selecting the first and last letters with the keyboard. Words can appear horizontally, vertically, diagonally, and backwards. Choose **New Puzzle** at any time to start over.
+
+The Word Search game is self-contained in one HTML file and does not need external dependencies, a build step, or a server.
+See [`PRD_word_search.md`](./PRD_word_search.md) for the product requirements and acceptance criteria.
+
 ## Development
 
 1. Clone the repository
-2. Open `memory-game.html` in a web browser
+2. Open `memory-game.html` or `word-search.html` in a web browser
 3. Or serve using a local HTTP server:
    ```bash
    python3 -m http.server 8000
    ```
-4. Visit `http://localhost:8000/memory-game.html`
+4. Visit `http://localhost:8000/memory-game.html` or `http://localhost:8000/word-search.html`
